@@ -14,7 +14,7 @@ def update_topics(mongo_collection, name, topics):
 
     Args:
         mongo_collection (object): pymongo collection object.
-        name (string): the school name to update.
+        name (str): the school name to update.
         topics (list): the list of topics approached in the school.
 
     """
