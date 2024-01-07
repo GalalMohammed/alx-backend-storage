@@ -10,6 +10,7 @@ Example:
 
 
 import uuid
+from typing import Union
 import redis
 
 
@@ -21,7 +22,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data: bytes | str | int | float) -> str:
+    def store(self, data: Union[bytes, str, int, float]) -> str:
         """Store the input data in Redis using a random key.
 
         Args:
