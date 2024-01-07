@@ -38,7 +38,7 @@ class Cache:
         return key
 
     def get(self, key: str,
-            fn:Optional[Callable]) -> Union[str, bytes, int, float]:
+            fn:Optional[Callable] = None) -> Union[str, bytes, int, float]:
         """Retrieve from the server.
 
         Args:
