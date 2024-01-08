@@ -94,9 +94,11 @@ def replay(method: Callable) -> None:
 
 
 class Cache:
-    """Cache class for redis client test dummy texxxxxxxxxxxxxxxxxxxxt."""
+    """
+    Cache class for redis client.
+    """
 
-    def __init__(self) -> None:
+    def __init__(self):
         """__init__ method of Cache class."""
         self._redis = redis.Redis()
         self._redis.flushdb()
