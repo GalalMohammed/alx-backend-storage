@@ -117,49 +117,49 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-#    @count_calls
-#    @call_history
-#    def get(self, key: str,
-#            fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
-#        """Retrieve from the server.
+    @count_calls
+    @call_history
+    def get(self, key: str,
+            fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
+        """Retrieve from the server.
 
-#        Args:
-#            key (str): key to be retrieved.
-#            fn: (object): data format converter.
+        Args:
+            key (str): key to be retrieved.
+            fn: (object): data format converter.
 
-#        Returns:
-#            data.
+        Returns:
+            data.
 
-#        """
-#        data = self._redis.get(key)
-#        if fn:
-#            return fn(data)
-#        return data
+        """
+        data = self._redis.get(key)
+        if fn:
+            return fn(data)
+        return data
 
-#    @count_calls
-#    @call_history
-#    def get_str(self, key: str) -> str:
-#        """Retrieve from the server.
+    @count_calls
+    @call_history
+    def get_str(self, key: str) -> str:
+        """Retrieve from the server.
 
-#        Args:
-#            key (str): key to be retrieved.
+        Args:
+            key (str): key to be retrieved.
 
-#        Returns:
-#            data.
+        Returns:
+            data.
 
-#        """
-#        return str(self._redis.get(key))
+        """
+        return str(self._redis.get(key))
 
-#    @count_calls
-#    @call_history
-#    def get_int(self, key: str) -> int:
-#        """Retrieve from the server.
-#
-#        Args:
-#            key (str): key to be retrieved.
-#
-#        Returns:
-#            data.
-#
-#        """
-#        return int(self._redis.get(key))
+    @count_calls
+    @call_history
+    def get_int(self, key: str) -> int:
+        """Retrieve from the server.
+
+        Args:
+            key (str): key to be retrieved.
+
+        Returns:
+            data.
+
+        """
+        return int(self._redis.get(key))
