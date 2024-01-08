@@ -89,15 +89,15 @@ def replay(method: Callable) -> None:
           + rds.get(method.__qualname__).decode("utf-8") + " times:")
     for inpt, otpt in zip(rds.lrange(method.__qualname__ + ":inputs", 0, -1),
                           rds.lrange(method.__qualname__ + ":outputs", 0, -1)):
-        print(f"{method.__qualname__}(*({inpt.decode('utf-8')},))"
+        print(f"{method.__qualname__}(*{inpt.decode('utf-8')})"
               + f" -> {otpt.decode('utf-8')}")
 
 
 class Cache:
-    """Cache class."""
+    """Cache class for redis."""
 
     def __init__(self) -> None:
-        """__init__ method."""
+        """__init__ method of Cache class."""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
