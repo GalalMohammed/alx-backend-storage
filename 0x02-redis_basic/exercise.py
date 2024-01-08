@@ -17,7 +17,7 @@ import redis
 
 
 def count_calls(method: Callable) -> Callable:
-    """count how many times methods of the Cache class are called.
+    """Count how many times methods of the Cache class are called.
 
     Args:
         method (object): Cache method.
@@ -31,7 +31,7 @@ def count_calls(method: Callable) -> Callable:
         """Count how many times methods of the Cache class are called.
 
         Args:
-            self: instance.
+            self (object): instance.
             *args: Variable length argument list.
             **kwds: keyword arguments.
 
@@ -46,6 +46,35 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwds)
     return wrapper
 
+def call_history(method: Callable) -> Callable:
+    """Store the history of inputs and outputs for a particular function.
+
+    Args:
+        method (object): function.
+
+    Returns:
+        wrapper.
+
+    """
+    @wraps(method)
+    def wrapper(self, *args):
+        """add its input parameters to one list in redis
+        and store its output into another list.
+
+        Args:
+            self (object): instance.
+            *args: args list.
+
+        Returns:
+            output of wrapped function.
+
+        """
+        self._redis.rpush(method.__qualname__ + ":inputs", str(args))
+        output = method(self, *args)
+        self._redis.rpush(method.__qualname__ + ":outputs", output)
+        return output
+    return wrapper
+
 
 class Cache:
     """Cache class."""
@@ -56,6 +85,7 @@ class Cache:
         self._redis.flushdb()
 
     @count_calls
+    @call_history
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Store the input data in Redis using a random key.
 
@@ -71,6 +101,7 @@ class Cache:
         return key
 
     @count_calls
+    @call_history
     def get(self, key: str,
             fn:Optional[Callable] = None) -> Union[str, bytes, int, float]:
         """Retrieve from the server.
@@ -89,6 +120,7 @@ class Cache:
         return data
 
     @count_calls
+    @call_history
     def get_str(self, key: str) -> str:
         """Retrieve from the server.
 
@@ -102,6 +134,7 @@ class Cache:
         return str(self._redis.get(key))
     
     @count_calls
+    @call_history
     def get_int(self, key: str) -> int:
         """Retrieve from the server.
 
