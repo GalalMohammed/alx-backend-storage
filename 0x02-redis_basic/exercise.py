@@ -11,8 +11,8 @@ Example:
 
 import uuid
 from functools import wraps
-from typing import Union, Optional
-from collections.abc import Callable
+from typing import Union, Optional, Callable
+#from collections.abc import Callable
 import redis
 
 
