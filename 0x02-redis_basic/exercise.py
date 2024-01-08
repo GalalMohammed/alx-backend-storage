@@ -46,6 +46,7 @@ def count_calls(method: Callable) -> Callable:
         return method(self, *args, **kwds)
     return wrapper
 
+
 def call_history(method: Callable) -> Callable:
     """Store the history of inputs and outputs for a particular function.
 
@@ -76,6 +77,22 @@ def call_history(method: Callable) -> Callable:
     return wrapper
 
 
+def replay(method: Callable) -> None:
+    """Display the history of calls of a particular function.
+
+    Args:
+        method (object): function.
+
+    """
+    rds = redis.Redis()
+    print(method.__qualname__ + " was called "
+          + rds.get(method.__qualname__).decode("utf-8") + " times:")
+    for inpt, otpt in zip(rds.lrange(method.__qualname__ + ":inputs", 0, -1),
+                          rds.lrange(method.__qualname__ + ":outputs", 0, -1)):
+        print(f"{method.__qualname__}(*({inpt.decode('utf-8')},))"
+              + f" -> {otpt.decode('utf-8')}")
+
+
 class Cache:
     """Cache class."""
 
@@ -103,7 +120,7 @@ class Cache:
     @count_calls
     @call_history
     def get(self, key: str,
-            fn:Optional[Callable] = None) -> Union[str, bytes, int, float]:
+            fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
         """Retrieve from the server.
 
         Args:
@@ -132,7 +149,7 @@ class Cache:
 
         """
         return str(self._redis.get(key))
-    
+
     @count_calls
     @call_history
     def get_int(self, key: str) -> int:
